@@ -1,17 +1,62 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NLog;
+using NLog.Web;
+using BusinessLayer.Interface;
+using BusinessLayer.Service;
+using RepositoryLayer.Interface;
+using RepositoryLayer.Service;
+using System;
 
-// Add services to the container.
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+try
+{
+    logger.Info("Application is starting...");
 
-builder.Services.AddControllers();
+    var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+    // Add services to the container
+    builder.Services.AddControllers();
 
-// Configure the HTTP request pipeline.
+    builder.Services.AddScoped<IGreetingBL, GreetingBL>();
+    builder.Services.AddScoped<IGreetingRL, GreetingRL>();
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 
-app.MapControllers();
+    // Configure Logging
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-app.Run();
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+
+    // Configure the HTTP request pipeline
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Error");
+    }
+
+    app.UseRouting();
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
+}
+catch (Exception ex)
+{
+    logger.Error(ex, "Application startup failed.");
+    throw;
+}
+finally
+{
+    NLog.LogManager.Shutdown();
+}

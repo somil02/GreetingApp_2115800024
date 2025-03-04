@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ModelLayer.Model;
-using System.Threading.Tasks;
+using BusinessLayer.Service;
+using BusinessLayer.Interface;
+using NLog;
+using RepositoryLayer.Service;
 
 namespace GreetingApp.Controllers
 {
@@ -124,6 +128,24 @@ namespace GreetingApp.Controllers
                 Message = "Greeting deleted",
                 Data = data
             };
+            return Ok(response);
+        }
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly IGreetingBL _greetingBL;
+
+        public HelloGreetingController(IGreetingBL greetingBL)
+        {
+            _greetingBL = greetingBL;
+        }
+
+        [HttpGet("Greetings")]
+        public IActionResult Greetings()
+        {
+            logger.Info("GET /Greetings request received.");
+
+            var response = _greetingBL.Greet();
+
+            logger.Info("GET /Greetings response: {@Response}", response);
             return Ok(response);
         }
     }
