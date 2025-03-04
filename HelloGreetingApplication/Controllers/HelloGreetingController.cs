@@ -138,6 +138,11 @@ namespace GreetingApp.Controllers
             _greetingBL = greetingBL;
         }
 
+        /// <summary>
+        /// Greeting from service
+        /// </summary>
+        /// <returns>"Hello World</returns>
+
         [HttpGet("Greetings")]
         public IActionResult Greetings()
         {
@@ -146,6 +151,23 @@ namespace GreetingApp.Controllers
             var response = _greetingBL.Greet();
 
             logger.Info("GET /Greetings response: {@Response}", response);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Greeting by name based on attribute provided by user
+        /// </summary>
+        /// <param name="greetRequest"></param>
+        /// <returns>Greeting</returns>
+        /// 
+        [HttpPost("GreetingsByName")]
+
+        public IActionResult GreetingByName(GreetingRequestModel greetRequest)
+        {
+            logger.Info("GET request received.");
+
+            var response = _greetingBL.GreetByName(greetRequest);
+            logger.Info("GET response: {@Response}", response);
             return Ok(response);
         }
     }
