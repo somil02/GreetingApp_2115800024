@@ -16,5 +16,6 @@ namespace BusinessLayer.Interface
         string GreetByName(GreetingRequestModel greetRequest);
         GreetingEntity AddGreeting(SaveGreetingModel greetRequest);
         string GetGreetingById(int id);
+        List<string> GetAllGreetingMessage();
     }
 }

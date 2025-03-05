@@ -48,5 +48,15 @@ namespace RepositoryLayer.Service
             }
             return null;
         }
+        public List<string> GetAllGreetingMessage()
+        {
+            var result = _dbContext.Greetings.ToList();
+            List<string> greetings = new List<string>();
+            foreach (var greet in result)
+            {
+                greetings.Add(greet.GreetingMessage);
+            }
+            return greetings;
+        }
     }
 }

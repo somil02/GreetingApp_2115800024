@@ -202,5 +202,17 @@ namespace GreetingApp.Controllers
             logger.Info("GET response: {@Response}", response);
             return Ok(response);
         }
+        /// <summary>
+        /// Get All Greeting Messages
+        /// </summary>
+        [HttpGet]
+        [Route("GetAllGreetingMessage")]
+        public IActionResult GetAllGreetingMessage()
+        {
+            logger.Info("GET request received.");
+            var response = _greetingBL.GetAllGreetingMessage();
+            logger.Info("GET response: {@Response}", response);
+            return Ok(response);
+        }
     }
 }
