@@ -58,5 +58,16 @@ namespace RepositoryLayer.Service
             }
             return greetings;
         }
+        public GreetingEntity UpdateGreeting(int id,string newMessage)
+        {
+            var result = _dbContext.Greetings.FirstOrDefault<GreetingEntity>(e => e.Id == id);
+            if (result != null)
+            {
+                result.GreetingMessage = newMessage;
+                _dbContext.SaveChanges();
+                return result;
+            }
+            return null;
+        }
     }
 }
