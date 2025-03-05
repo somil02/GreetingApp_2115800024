@@ -232,5 +232,27 @@ namespace GreetingApp.Controllers
             logger.Info("PUT response: {@Response}", response);
             return Ok(response);
         }
+        /// <summary>
+        /// Delete Greeting Message
+        /// </summary>
+        /// <param name="id"></param>
+        /// <return></return>
+        [HttpDelete]
+        [Route("DeleteGreeting")]
+        public IActionResult DeleteGreeting(int id)
+        {
+            logger.Info("DELETE request received.");
+            var response = _greetingBL.DeleteGreeting(id);
+            if (response == false)
+            {
+                string error = "Greeting not found";
+                return Ok(error);
+            }
+            else { 
+            logger.Info("DELETE response: {@Response}", response);
+                string msg = "Greeting Deleted";
+                return Ok(msg);
+        }
+        }
     }
 }
