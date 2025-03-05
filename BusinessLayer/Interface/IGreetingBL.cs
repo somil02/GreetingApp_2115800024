@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ModelLayer.Model;
+using RepositoryLayer.Interface;
+using RepositoryLayer.Entity;
+
 
 namespace BusinessLayer.Interface
 {
@@ -11,5 +14,6 @@ namespace BusinessLayer.Interface
     {
         string Greet();
         string GreetByName(GreetingRequestModel greetRequest);
+        GreetingEntity AddGreeting(SaveGreetingModel greetRequest);
     }
 }

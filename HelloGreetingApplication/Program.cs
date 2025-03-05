@@ -9,6 +9,8 @@ using BusinessLayer.Service;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
 using System;
+using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Context;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -16,6 +18,9 @@ try
     logger.Info("Application is starting...");
 
     var builder = WebApplication.CreateBuilder(args);
+    var connectionString = builder.Configuration.GetConnectionString("GreetingConnection");
+
+    builder.Services.AddDbContext<GreetingDbContext>(options => options.UseSqlServer(connectionString));
 
     // Add services to the container
     builder.Services.AddControllers();

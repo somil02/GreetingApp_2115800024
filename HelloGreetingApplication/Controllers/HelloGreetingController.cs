@@ -170,5 +170,14 @@ namespace GreetingApp.Controllers
             logger.Info("GET response: {@Response}", response);
             return Ok(response);
         }
+        [HttpPost]
+        [Route("AddGreeting")]
+        public IActionResult AddGreeting(SaveGreetingModel greeting)
+        {
+            logger.Info("POST request received.");
+            var response = _greetingBL.AddGreeting(greeting);
+            logger.Info("POST response: {@Response}", response);
+            return Ok(response);
+        }
     }
 }
