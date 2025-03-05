@@ -170,6 +170,11 @@ namespace GreetingApp.Controllers
             logger.Info("GET response: {@Response}", response);
             return Ok(response);
         }
+        /// <summary>
+        ///     Add Greeting
+        /// </summary>
+        /// <param name="greeting"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("AddGreeting")]
         public IActionResult AddGreeting(SaveGreetingModel greeting)
@@ -177,6 +182,24 @@ namespace GreetingApp.Controllers
             logger.Info("POST request received.");
             var response = _greetingBL.AddGreeting(greeting);
             logger.Info("POST response: {@Response}", response);
+            return Ok(response);
+        }
+        /// <summary>
+        /// Get Greeting by Id    
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetGreetingById")]
+        public IActionResult GetGreetingById(int id)
+        {
+            logger.Info("GET request received.");
+            var response = _greetingBL.GetGreetingById(id);
+            if (response == null)
+            {
+                return NotFound();
+            }
+            logger.Info("GET response: {@Response}", response);
             return Ok(response);
         }
     }
