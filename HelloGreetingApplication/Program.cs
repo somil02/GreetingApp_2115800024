@@ -11,6 +11,7 @@ using RepositoryLayer.Service;
 using System;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Context;
+using GreetingApp.Middleware; // Import Middleware
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 try
@@ -28,7 +29,6 @@ try
     builder.Services.AddScoped<IGreetingBL, GreetingBL>();
     builder.Services.AddScoped<IGreetingRL, GreetingRL>();
 
-
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
@@ -44,6 +44,8 @@ try
         app.UseSwaggerUI();
     }
 
+    // Register the global exception handling middleware
+    app.UseMiddleware<GlobalExceptionMiddleware>();
 
     // Configure the HTTP request pipeline
     if (!app.Environment.IsDevelopment())

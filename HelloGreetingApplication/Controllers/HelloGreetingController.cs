@@ -254,5 +254,15 @@ namespace GreetingApp.Controllers
                 return Ok(msg);
         }
         }
+        /// <summary>
+        /// Test exception handling                             
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        [HttpGet("test-exception")]
+        public IActionResult TestException()
+        {
+            throw new Exception("This is a test exception for global handling.");
+        }
     }
 }
