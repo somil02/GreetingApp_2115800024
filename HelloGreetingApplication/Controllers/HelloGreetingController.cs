@@ -5,6 +5,8 @@ using BusinessLayer.Service;
 using BusinessLayer.Interface;
 using NLog;
 using RepositoryLayer.Service;
+using Middleware.ExceptionHandler;
+
 
 namespace GreetingApp.Controllers
 {
@@ -17,21 +19,29 @@ namespace GreetingApp.Controllers
         /// </summary>
         /// <returns>A ResponseModel containing a welcome message and current date.</returns>
         [HttpGet]
-        public IActionResult Get()
+            public IActionResult Get()
         {
-            var data = new
+            try
             {
-                Greeting = "Hello! Welcome to the API",
-                Date = DateTime.Now
-            };
+                var data = new
+                {
+                    Greeting = "Hello! Welcome to the API",
+                    Date = DateTime.Now
+                };
 
-            var response = new ResponseModel<object>
+                var response = new ResponseModel<object>
+                {
+                    Success = true,
+                    Message = "Request successful",
+                    Data = data
+                };
+                return Ok(response);
+            }
+            catch (Exception exception)
             {
-                Success = true,
-                Message = "Request successful",
-                Data = data
-            };
-            return Ok(response);
+                var errorResponse = ExceptionHandler.CreateErrorResponse(exception);
+                return StatusCode(500, errorResponse);
+            }
         }
 
         /// <summary>
@@ -253,16 +263,6 @@ namespace GreetingApp.Controllers
                 string msg = "Greeting Deleted";
                 return Ok(msg);
         }
-        }
-        /// <summary>
-        /// Test exception handling                             
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        [HttpGet("test-exception")]
-        public IActionResult TestException()
-        {
-            throw new Exception("This is a test exception for global handling.");
         }
     }
 }

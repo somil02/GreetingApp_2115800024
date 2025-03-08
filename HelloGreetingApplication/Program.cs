@@ -6,14 +6,17 @@ using NLog;
 using NLog.Web;
 using BusinessLayer.Interface;
 using BusinessLayer.Service;
-using RepositoryLayer.Interface;
+using RepositoryLayer.Interface; 
 using RepositoryLayer.Service;
-using System;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Context;
-using GreetingApp.Middleware; // Import Middleware
+using Middleware.GlobalExceptionFilter;
+using RepositoryLayer.Hashing;
+using Middleware.ExceptionHandler;
+
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+
 try
 {
     logger.Info("Application is starting...");
@@ -21,37 +24,42 @@ try
     var builder = WebApplication.CreateBuilder(args);
     var connectionString = builder.Configuration.GetConnectionString("GreetingConnection");
 
+    // Configure Entity Framework and Database Context
     builder.Services.AddDbContext<GreetingDbContext>(options => options.UseSqlServer(connectionString));
 
-    // Add services to the container
-    builder.Services.AddControllers();
-
+    // Register Business and Repository Layer services
     builder.Services.AddScoped<IGreetingBL, GreetingBL>();
     builder.Services.AddScoped<IGreetingRL, GreetingRL>();
+
+    builder.Services.AddScoped<IUserBL, UserBL>();
+    builder.Services.AddScoped<IUserRL, UserRL>();
+    builder.Services.AddScoped<Password_Hash>();
+
+
+    // Add Controllers and Global Exception Filter
+    builder.Services.AddControllers(options =>
+    {
+        options.Filters.Add<GlobalExceptionFilter>(); // Register GlobalExceptionFilter
+    });
+
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
-    // Configure Logging
-    builder.Logging.ClearProviders();
+    // Configure Logging with NLog
+    builder.Logging.ClearProviders( );
     builder.Host.UseNLog();
 
     var app = builder.Build();
+   
 
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+    app.UseMiddleware<ExceptionHandler>();
 
-    // Register the global exception handling middleware
-    app.UseMiddleware<GlobalExceptionMiddleware>();
-
-    // Configure the HTTP request pipeline
-    if (!app.Environment.IsDevelopment())
-    {
-        app.UseExceptionHandler("/Error");
-    }
 
     app.UseRouting();
     app.UseAuthorization();
