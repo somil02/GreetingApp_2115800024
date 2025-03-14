@@ -34,7 +34,7 @@ namespace BusinessLayer.Service
             return null;
         }
 
-        public UserModel LoginUser(LoginModel userLoginDto)
+        public string LoginUser(LoginModel userLoginDto)
         {
             return _userRl.LoginUser(userLoginDto);
         }

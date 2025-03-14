@@ -6,7 +6,7 @@ namespace BusinessLayer.Interface
     public interface IUserBL
     {
         public UserModel RegisterUser(RegisterModel userRegistration);
-        public UserModel LoginUser(LoginModel userLoginDto);
+        public string LoginUser(LoginModel userLoginDto);
         public Task<string> ForgetPassword(string email);
         public bool ResetPassword(string newPassword, string token);
     }

@@ -13,6 +13,7 @@ using RepositoryLayer.Context;
 using Middleware.GlobalExceptionFilter;
 using RepositoryLayer.Hashing;
 using Middleware.ExceptionHandler;
+using RepositoryLayer.Token;
 
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -34,6 +35,7 @@ try
     builder.Services.AddScoped<IUserBL, UserBL>();
     builder.Services.AddScoped<IUserRL, UserRL>();
     builder.Services.AddScoped<Password_Hash>();
+    builder.Services.AddScoped<JwtToken>();
 
 
     // Add Controllers and Global Exception Filter

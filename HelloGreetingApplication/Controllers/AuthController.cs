@@ -56,20 +56,22 @@ namespace UserApi.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginModel loginModel)
         {
-            var user = _userBL.LoginUser(loginModel);
-            if (user != null)
+            var token = _userBL.LoginUser(loginModel);
+            if (!string.IsNullOrEmpty(token))
             {
-                return Ok(new ResponseModel<bool>
+                return Ok(new ResponseModel<string>
                 {
                     Success = true,
                     Message = "Login successful",
-                    Data = true
+                    Data = token
                 });
             }
-            return Unauthorized(new ResponseModel<bool>
+
+            return Unauthorized(new ResponseModel<string>
             {
                 Success = false,
-                Message = "Login failed"
+                Message = "Login failed",
+                Data = null
             });
         }
 

@@ -6,7 +6,7 @@ namespace RepositoryLayer.Interface
     public interface IUserRL
     {
         public UserEntity RegisterUser(RegisterModel userRegistration);
-        public UserModel LoginUser(LoginModel userLoginDto);
+        public string LoginUser(LoginModel loginDto);
         public Task<string> ForgetPassword(string email);
         public bool ResetPassword(string newPassword, int userId);
     }
