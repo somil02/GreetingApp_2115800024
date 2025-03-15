@@ -36,6 +36,8 @@ try
     builder.Services.AddScoped<IUserRL, UserRL>();
     builder.Services.AddScoped<Password_Hash>();
     builder.Services.AddScoped<JwtToken>();
+    builder.Services.AddScoped<EmailService>();
+
 
 
     // Add Controllers and Global Exception Filter
@@ -77,3 +79,9 @@ finally
 {
     NLog.LogManager.Shutdown();
 }
+
+//uii forget password ka mail aara h ab reset wala dekhlo ki jo aara h otken usee kse krnege'
+//oki??
+//srf tab tab nhi kr dena dekhna kse kiya h kya hoga oki
+
+//hellooo???

@@ -7,7 +7,7 @@ namespace BusinessLayer.Interface
     {
         public UserModel RegisterUser(RegisterModel userRegistration);
         public string LoginUser(LoginModel userLoginDto);
-        public Task<string> ForgetPassword(string email);
-        public bool ResetPassword(string newPassword, string token);
+        Task<string> ForgetPassword(string email);
+        bool ResetPassword(string token, string newPassword);
     }
 }

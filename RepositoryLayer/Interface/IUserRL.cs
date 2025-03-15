@@ -7,7 +7,7 @@ namespace RepositoryLayer.Interface
     {
         public UserEntity RegisterUser(RegisterModel userRegistration);
         public string LoginUser(LoginModel loginDto);
-        public Task<string> ForgetPassword(string email);
-        public bool ResetPassword(string newPassword, int userId);
+        Task<string> ForgetPassword(string email);
+        bool ResetPassword(string newPassword, int userId);
     }
 }

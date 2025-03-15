@@ -5,18 +5,21 @@ using RepositoryLayer.Entity;
 using RepositoryLayer.Interface;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using RepositoryLayer.Token;
+using System.Security.Claims;
+
 
 namespace BusinessLayer.Service
 {
     public class UserBL : IUserBL
     {
         private IUserRL _userRl;
-        //private readonly ILogger<UserBL> _logger;
+        private readonly JwtToken _jwtToken;
 
-        public UserBL(IUserRL userRl, ILogger<UserBL> logger)
+        public UserBL(IUserRL userRl, JwtToken jwtToken)
         {
             _userRl = userRl;
-            //_logger = logger;
+            _jwtToken = jwtToken;
         }
 
         public UserModel RegisterUser(RegisterModel registerModel)
@@ -39,13 +42,16 @@ namespace BusinessLayer.Service
             return _userRl.LoginUser(userLoginDto);
         }
 
-        public Task<string> ForgetPassword(string email)
+        public async Task<string> ForgetPassword(string email)
         {
-            throw new NotImplementedException();
+            return await _userRl.ForgetPassword(email);
         }
         public bool ResetPassword(string newPassword, string token)
         {
-            throw new NotImplementedException();
+            var principal = _jwtToken.GetTokenValidation(token);
+            var userId = Convert.ToInt32(principal.FindFirstValue("UserId"));
+            return _userRl.ResetPassword(newPassword, userId);
         }
     }
 }
+

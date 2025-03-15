@@ -78,13 +78,36 @@ namespace UserApi.Controllers
         [HttpPost("forgotpassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel passwordModel)
         {
-            throw new System.NotImplementedException();
+            var result = await _userBL.ForgetPassword(passwordModel.Email);
+            var response = new ResponseModel<string>();
+            if (result != null)
+            {
+                response.Success = true;
+                response.Message = $"Reset password link sent successfully to your email address {result}";
+                return Ok(response);
+            }
+            response.Success = false;
+            response.Message = $"User is not present with email id ={passwordModel.Email}";
+            return BadRequest(response);
         }
 
         [HttpPatch("resetpassword")]
-        public IActionResult ResetPassword([FromQuery] int userId, ResetPasswordModel resetModel)
+        public IActionResult ResetPassword([FromQuery] string token,[FromBody] ResetPasswordModel resetModel)
         {
-            throw new System.NotImplementedException();
+
+            var result = _userBL.ResetPassword(resetModel.NewPassword, token);
+            var response = new ResponseModel<bool>();
+            if (result)
+            {
+
+                response.Success = true;
+                response.Message = "Password reset successful";
+                response.Data = result;
+                return Ok(response);
+            }
+            response.Success = false;
+            response.Message = "Error occurred resetting password. Please try again.";
+            return BadRequest(response);
         }
     }
 }
